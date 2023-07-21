@@ -17,7 +17,8 @@ public class Controller {
     public IdFilm create(IdFilm idFilm) {
         idFilm.setId(nextId);
         nextId++;
-        return idFilms.put(idFilm.getId(),idFilm);
+        idFilms.put(idFilm.getId(),idFilm);
+        return idFilm;
     }
 
     public IdFilm update(IdFilm idFilm) {

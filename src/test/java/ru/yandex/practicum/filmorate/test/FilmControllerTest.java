@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
+import ru.yandex.practicum.filmorate.exceptions.FilmObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -20,7 +21,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void createFilm() {
+    public void shouldCreateFilm() {
         film = Film.builder()
                 .name("Барби")
                 .description("Барби выгоняют из Барбиленда, потому что она не соответствует его нормам красоты.А ЕЩЕ ТАМ ЕСТЬ" +
@@ -29,8 +30,8 @@ public class FilmControllerTest {
                 .duration(6840)
                 .build();
         Film filmSave = filmController.createFilm(film);
-        assertEquals(film,filmSave,"Фильмы не совпадают");
-        assertEquals(1,filmController.getAllFilms(),"Количество фильмов в хранилище неверно");
+        assertEquals(film, filmSave, "Фильмы не идентичны");
+        assertEquals(1, filmController.getAllFilms().size(), "Количество фильмов в хранилище неверно");
     }
 
     @Test
@@ -42,8 +43,8 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2023,7,22))
                 .duration(6840)
                 .build();
-        final UserValidateException e = assertThrows(UserValidateException.class, () -> filmController.createFilm(film));
-        assertEquals("Наименование фильма не может быть пустым", e.getMessage());
+        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
+        assertEquals("Название фильма не может быть пустым", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }
 
@@ -55,22 +56,22 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2023,7,22))
                 .duration(6840)
                 .build();
-        final UserValidateException e = assertThrows(UserValidateException.class, () -> filmController.createFilm(film));
-        assertEquals("Описание не должно быть длинее 200 символов", e.getMessage());
+        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
+        assertEquals("Максимальная длина описания — 200 символов", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }
 
     @Test
     public void shouldNotCreateFilmDateIsBefore() {
         film = Film.builder() // фильм с длинным описанием
-                .name("")
+                .name("Барби")
                 .description("Барби выгоняют из Барбиленда, потому что она не соответствует его нормам красоты.А ЕЩЕ ТАМ ЕСТЬ" +
                         " РАЙН ГОСЛИНГ")
                 .releaseDate(LocalDate.of(1895, 12, 27))
                 .duration(6840)
                 .build();
-        final UserValidateException e = assertThrows(UserValidateException.class, () -> filmController.createFilm(film));
-        assertEquals("Дата релиза не должна быть раньше 28 декабря 1895 года", e.getMessage());
+        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
+        assertEquals("Дата релиза  — не раньше 28 декабря 1895 года", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }
 
@@ -83,7 +84,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2023,7,22))
                 .duration(-1)
                 .build();
-        final UserValidateException e = assertThrows(UserValidateException.class, () -> filmController.createFilm(film));
+        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
         assertEquals("Продолжительность фильма не может быть отрицательным числом", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }

@@ -21,7 +21,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUser() {
+    public void shouldCreateUser() {
         user = User.builder()
                 .email("rayangosling@hollywood.com")
                 .login("ken")
@@ -29,8 +29,8 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1980,11,12))
                 .build();
         User userSave = userController.createUser(user);
-        assertEquals(user,userSave,"Вы не Райн Гослинг");
-        assertEquals(1,userController.getAllUsers());
+        assertEquals(user,userSave,"Дата рождения не может быть в будущем и пустой");
+        assertEquals(1,userController.getAllUsers().size(),"Количество пользователей в хранилище неверно");
     }
 
     @Test
@@ -42,7 +42,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1980,11,12))
                 .build();
         final UserValidateException e = assertThrows(UserValidateException.class, () -> userController.createUser(user));
-        assertEquals("Email должен содержать символ @", e.getMessage());
+        assertEquals("электронная почта не может быть пустой и должна содержать символ @", e.getMessage());
         assertEquals(0, userController.getAllUsers().size(), "Список должен быть пустым");
     }
 
@@ -55,7 +55,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(1980,11,12))
                 .build();
         final UserValidateException e = assertThrows(UserValidateException.class, () -> userController.createUser(user));
-        assertEquals("Логин не может содержать пробелы", e.getMessage());
+        assertEquals("логин не может быть пустым", e.getMessage());
         assertEquals(0, userController.getAllUsers().size(), "Список должен быть пустым");
     }
 
@@ -80,7 +80,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(9999, 9, 9))
                 .build();
         final UserValidateException e = assertThrows(UserValidateException.class, () -> userController.createUser(user));
-        assertEquals("Дата рождения не может быть в будущем", e.getMessage());
+        assertEquals("Дата рождения не может быть в будущем.", e.getMessage());
         assertEquals(0, userController.getAllUsers().size(), "Список должен быть пустым");
     }
 }

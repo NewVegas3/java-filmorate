@@ -18,7 +18,7 @@ public class UserController extends Controller {
     public User createUser(@RequestBody User user) {
         userValidator.validator(user);
         log.info("Получен POST-запрос к эндпоинту: '/user', пользователь добавлен");
-        return (User) createUser(user);
+        return (User) create(user);
     }
 
     @PutMapping(value = "/user")
