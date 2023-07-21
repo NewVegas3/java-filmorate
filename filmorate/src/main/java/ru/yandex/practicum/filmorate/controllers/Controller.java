@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public class Controller  {
+public class Controller {
     private Map<Integer, IdFilm> idFilms = new HashMap<>();
     private int nextId = 1;
 
