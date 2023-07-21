@@ -1,10 +1,7 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.IdFilm;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
@@ -17,7 +14,7 @@ public class UserController extends Controller {
 
     UserValidator userValidator = new UserValidator();
 
-    @PutMapping(value = "/user")
+    @PostMapping(value = "/user")
     public User createUser(@RequestBody User user) {
         userValidator.validator(user);
         log.info("Получен POST-запрос к эндпоинту: '/user', пользователь добавлен");
