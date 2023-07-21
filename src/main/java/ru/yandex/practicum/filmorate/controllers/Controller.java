@@ -12,7 +12,7 @@ import java.util.Map;
 @Slf4j
 public class Controller {
     private Map<Integer, IdFilm> idFilms = new HashMap<>();
-    private int nextId = 1;
+    private int nextId = 0;
 
     public IdFilm create(IdFilm idFilm) {
         idFilm.setId(nextId);
