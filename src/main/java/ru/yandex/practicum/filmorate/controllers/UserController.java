@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.IdFilm;
+import ru.yandex.practicum.filmorate.model.Entity;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 
@@ -17,20 +17,20 @@ public class UserController extends Controller {
 
     @PostMapping(value = "/users")
     public User createUser(@Valid @RequestBody User user) {
-        userValidator.validator(user);
+        userValidator.validate(user);
         log.info("Получен POST-запрос к эндпоинту: '/user', пользователь добавлен");
         return (User) create(user);
     }
 
     @PutMapping(value = "/users")
     public User updateUser(@Valid @RequestBody User user) {
-        userValidator.validator(user);
+        userValidator.validate(user);
         log.info("Получен PUT-запрос к эндпоинту: '/user', пользователь обновлен");
         return (User) update(user);
     }
 
     @GetMapping("/users")
-    public List<IdFilm> getAllUsers() {
+    public List<Entity> getAllUsers() {
         return getAll();
     }
 }

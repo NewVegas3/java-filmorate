@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.model.IdFilm;
+import ru.yandex.practicum.filmorate.model.Entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,27 +11,27 @@ import java.util.Map;
 
 @Slf4j
 public class Controller {
-    private Map<Integer, IdFilm> idFilms = new HashMap<>();
+    private Map<Integer, Entity> entities = new HashMap<>();
     private int nextId = 1;
 
-    public IdFilm create(IdFilm idFilm) {
-        idFilm.setId(nextId);
+    public Entity create(Entity entity) {
+        entity.setId(nextId);
         nextId++;
-        idFilms.put(idFilm.getId(),idFilm);
-        return idFilm;
+        entities.put(entity.getId(), entity);
+        return entity;
     }
 
-    public IdFilm update(IdFilm idFilm) {
-        if (idFilms.containsKey(idFilm.getId())) {
-            idFilms.put(idFilm.getId(),idFilm);
+    public Entity update(Entity entity) {
+        if (entities.containsKey(entity.getId())) {
+            entities.put(entity.getId(), entity);
         } else {
             log.info("Фильм не обновлен, так как в хранилище нет фильмов с заданным id");
-            throw new ObjectNotFoundException("Фильм с id: " + idFilm.getId() + "не найден");
+            throw new ObjectNotFoundException("Фильм с id: " + entity.getId() + "не найден");
         }
-        return idFilm;
+        return entity;
     }
 
-    List<IdFilm> getAll() {
-        return new ArrayList<>(idFilms.values());
+    List<Entity> getAll() {
+        return new ArrayList<>(entities.values());
     }
 }

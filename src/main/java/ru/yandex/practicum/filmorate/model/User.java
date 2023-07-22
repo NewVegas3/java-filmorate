@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class User extends IdFilm {
+public class User extends Entity {
     @NonNull
     @Email
     private final String email;

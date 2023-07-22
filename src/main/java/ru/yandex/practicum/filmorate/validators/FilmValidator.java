@@ -9,8 +9,8 @@ import java.time.LocalDate;
 import java.time.Month;
 
 @Slf4j
-public class FilmsValidator {
-    public void validator(Film film) throws ObjectNotFoundException {
+public class FilmValidator {
+    public void validate(Film film) throws ObjectNotFoundException {
         if (film.getName().equals("")) {
             log.info("Название фильма не может быть пустым");
             throw new ValidateException("Название фильма не может быть пустым");

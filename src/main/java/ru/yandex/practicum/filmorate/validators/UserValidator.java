@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Slf4j
 public class UserValidator {
-    public void validator(User user) throws ValidateException {
+    public void validate(User user) throws ValidateException {
         if (user.getEmail().indexOf('@') < 0) {
             log.info("электронная почта не может быть пустой и должна содержать символ @");
             throw new ValidateException("электронная почта не может быть пустой и должна содержать символ @");

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class Film extends IdFilm {
+public class Film extends Entity {
     @NonNull
     @NotBlank
     private String name;
