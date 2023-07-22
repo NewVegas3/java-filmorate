@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.model.IdFilm;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -15,17 +16,17 @@ public class UserController extends Controller {
     UserValidator userValidator = new UserValidator();
 
     @PostMapping(value = "/users")
-    public User createUser(@RequestBody User user) {
+    public User createUser(@Valid @RequestBody User user) {
         userValidator.validator(user);
         log.info("Получен POST-запрос к эндпоинту: '/user', пользователь добавлен");
         return (User) create(user);
     }
 
     @PutMapping(value = "/users")
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@Valid @RequestBody User user) {
         userValidator.validator(user);
         log.info("Получен PUT-запрос к эндпоинту: '/user', пользователь обновлен");
-        return (User) updateUser(user);
+        return (User) update(user);
     }
 
     @GetMapping("/users")
