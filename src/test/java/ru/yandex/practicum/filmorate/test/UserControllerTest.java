@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.UserController;
-import ru.yandex.practicum.filmorate.exceptions.UserValidateException;
+import ru.yandex.practicum.filmorate.exceptions.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -41,7 +41,7 @@ public class UserControllerTest {
                 .name("rayangosling")
                 .birthday(LocalDate.of(1980,11,12))
                 .build();
-        final UserValidateException e = assertThrows(UserValidateException.class, () -> userController.createUser(user));
+        final ValidateException e = assertThrows(ValidateException.class, () -> userController.createUser(user));
         assertEquals("электронная почта не может быть пустой и должна содержать символ @", e.getMessage());
         assertEquals(0, userController.getAllUsers().size(), "Список должен быть пустым");
     }
@@ -54,7 +54,7 @@ public class UserControllerTest {
                 .name("rayangosling")
                 .birthday(LocalDate.of(1980,11,12))
                 .build();
-        final UserValidateException e = assertThrows(UserValidateException.class, () -> userController.createUser(user));
+        final ValidateException e = assertThrows(ValidateException.class, () -> userController.createUser(user));
         assertEquals("логин не может быть пустым", e.getMessage());
         assertEquals(0, userController.getAllUsers().size(), "Список должен быть пустым");
     }
@@ -66,7 +66,6 @@ public class UserControllerTest {
                 .login("ken")
                 .birthday(LocalDate.of(1996, 12, 9))
                 .build();
-        User userSaved = userController.createUser(user);
         assertEquals(user.getLogin(), user.getName(), "Имя не равно логину");
         assertEquals(1, userController.getAllUsers().size(), "Количество пользователей в хранилище неверно");
     }
@@ -79,7 +78,7 @@ public class UserControllerTest {
                 .name("rayangosling")
                 .birthday(LocalDate.of(9999, 9, 9))
                 .build();
-        final UserValidateException e = assertThrows(UserValidateException.class, () -> userController.createUser(user));
+        final ValidateException e = assertThrows(ValidateException.class, () -> userController.createUser(user));
         assertEquals("Дата рождения не может быть в будущем.", e.getMessage());
         assertEquals(0, userController.getAllUsers().size(), "Список должен быть пустым");
     }

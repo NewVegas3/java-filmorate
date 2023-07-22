@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
-import ru.yandex.practicum.filmorate.exceptions.FilmObjectNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
@@ -42,7 +42,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2023,7,22))
                 .duration(6840)
                 .build();
-        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
+        final ValidateException e = assertThrows(ValidateException.class, () -> filmController.createFilm(film));
         assertEquals("Название фильма не может быть пустым", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }
@@ -55,7 +55,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2023,7,22))
                 .duration(6840)
                 .build();
-        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
+        final ValidateException e = assertThrows(ValidateException.class, () -> filmController.createFilm(film));
         assertEquals("Максимальная длина описания — 200 символов", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }
@@ -69,7 +69,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(1895, 12, 27))
                 .duration(6840)
                 .build();
-        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
+        final ValidateException e = assertThrows(ValidateException.class, () -> filmController.createFilm(film));
         assertEquals("Дата релиза  — не раньше 28 декабря 1895 года", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }
@@ -83,7 +83,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2023,7,22))
                 .duration(-1)
                 .build();
-        final FilmObjectNotFoundException e = assertThrows(FilmObjectNotFoundException.class, () -> filmController.createFilm(film));
+        final ValidateException e = assertThrows(ValidateException.class, () -> filmController.createFilm(film));
         assertEquals("Продолжительность фильма не может быть отрицательным числом", e.getMessage());
         assertEquals(0, filmController.getAllFilms().size(), "Список должен быть пустым");
     }
