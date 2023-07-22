@@ -17,7 +17,7 @@ public class FilmsValidator {
         } else if (film.getDescription().length() > 200) {
             log.info("Максимальная длина описания — 200 символов");
             throw new ValidateException("Максимальная длина описания — 200 символов");
-        } else if (film.getReleaseDate().isBefore(LocalDate.of(1985, Month.DECEMBER,28))) {
+        } else if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER,28))) {
             log.info("Дата релиза  — не раньше 28 декабря 1895 года");
             throw new ValidateException("Дата релиза  — не раньше 28 декабря 1895 года");
         } else if (film.getDuration() < 0) {
