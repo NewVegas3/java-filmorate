@@ -66,6 +66,7 @@ public class UserControllerTest {
                 .login("ken")
                 .birthday(LocalDate.of(1996, 12, 9))
                 .build();
+        User userSaved = userController.createUser(user);
         assertEquals(user.getLogin(), user.getName(), "Имя не равно логину");
         assertEquals(1, userController.getAllUsers().size(), "Количество пользователей в хранилище неверно");
     }
