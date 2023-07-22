@@ -14,14 +14,14 @@ public class UserController extends Controller {
 
     UserValidator userValidator = new UserValidator();
 
-    @PostMapping(value = "/user")
+    @PostMapping(value = "/users")
     public User createUser(@RequestBody User user) {
         userValidator.validator(user);
         log.info("Получен POST-запрос к эндпоинту: '/user', пользователь добавлен");
         return (User) create(user);
     }
 
-    @PutMapping(value = "/user")
+    @PutMapping(value = "/users")
     public User updateUser(@RequestBody User user) {
         userValidator.validator(user);
         log.info("Получен PUT-запрос к эндпоинту: '/user', пользователь обновлен");
