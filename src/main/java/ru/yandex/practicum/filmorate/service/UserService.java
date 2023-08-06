@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import javax.validation.ValidationException;
