@@ -9,7 +9,7 @@ import java.util.*;
 
 @Component
 @Slf4j
-public class InMemoryStorage <T extends Entity> {
+public class InMemoryStorage<T extends Entity> {
     private final Map<Integer, T> entities = new HashMap<>();
     private int nextId = 1;
 
@@ -48,6 +48,7 @@ public class InMemoryStorage <T extends Entity> {
     public List<Integer> getAllKeys() {
         return new ArrayList<>(entities.keySet());
     }
+
     public List<T> getAllValues() {
         return new ArrayList<>(entities.values());
     }
