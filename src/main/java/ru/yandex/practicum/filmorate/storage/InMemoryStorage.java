@@ -10,7 +10,7 @@ import java.util.*;
 @Component
 @Slf4j
 public class InMemoryStorage <T extends Entity> {
-    private Map<Integer, T> entities = new HashMap<>();
+    private final Map<Integer, T> entities = new HashMap<>();
     private int nextId = 1;
 
     public T create(T entity) {
