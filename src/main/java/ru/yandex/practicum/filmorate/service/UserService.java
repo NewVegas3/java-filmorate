@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryStorage;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import java.util.Set;
 
 @Service
 public class UserService {
-    private final InMemoryUserStorage userStorage;
+    private final InMemoryStorage<User> userStorage;
 
-    public UserService(InMemoryUserStorage userStorage) {
+    public UserService(InMemoryStorage<User> userStorage) {
         this.userStorage = userStorage;
     }
 

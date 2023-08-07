@@ -3,9 +3,8 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.InMemoryStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,10 +12,10 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
 
-    private final InMemoryFilmStorage filmStorage;
-    private final InMemoryUserStorage userStorage;
+    private final InMemoryStorage<Film> filmStorage;
+    private final InMemoryStorage<User> userStorage;
 
-    public FilmService(InMemoryFilmStorage filmStorage, InMemoryUserStorage userStorage) {
+    public FilmService(InMemoryStorage<Film> filmStorage, InMemoryStorage<User> userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
