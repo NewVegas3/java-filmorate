@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Entity;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
@@ -13,23 +12,24 @@ import java.util.List;
 @Slf4j
 @RestController
 public class UserController {
+
     private final InMemoryUserStorage userStorage;
     private final UserService userService;
 
-    public UserController(UserService userService, InMemoryUserStorage userStorage) {
-        this.userService = userService;
+    public UserController(InMemoryUserStorage userStorage, UserService userService) {
         this.userStorage = userStorage;
+        this.userService = userService;
     }
 
     @PostMapping(value = "/users")
-    public User createUser(@Valid @RequestBody User user) { // объект User передается в теле запроса (без id), если поля объекта не заполнены произойдёт ошибка
-        log.info("Получен POST-запрос к эндпоинту: '/user'");
+    public User createUser(@Valid @RequestBody User user) {
+        log.info("Получен POST-запрос к эндпоинту: '/users'");
         return userStorage.create(user);
     }
 
     @PutMapping(value = "/users")
-    public User updateUser(@Valid @RequestBody User user) { // объект User передается в теле запроса
-        log.info("Получен PUT-запрос к эндпоинту: '/user'");
+    public User updateUser(@Valid @RequestBody User user) {
+        log.info("Получен PUT-запрос к эндпоинту: '/users'");
         return userStorage.update(user);
     }
 
@@ -39,27 +39,26 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public Entity getUser(@PathVariable int id) {
+    public User getUser(@PathVariable int id) {
         return userStorage.getEntity(id);
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")
     public void addFriend(@PathVariable int id, @PathVariable int friendId) {
-        log.info("Получен PUT-запрос к эндпоинту: '/user'/{id}/friends/{friendId}'");
+        log.info("Получен PUT-запрос к эндпоинту: '/users/{id}/friends/{friendId}'");
         userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
     public void removeFriend(@PathVariable int id, @PathVariable int friendId) {
-        log.info("Получен DELETE-запрос к эндпоинту: '/user'/{id}/friends/{friendId}'");
+        log.info("Получен DELETE-запрос к эндпоинту: '/users/{id}/friends/{friendId}'");
         userService.removeFriend(id, friendId);
     }
 
     @GetMapping("/users/{id}/friends")
     public List<User> getListOfUsersFriends(@PathVariable int id) {
         log.info("Получен GET-запрос к эндпоинту: '/users/{id}/friends'");
-        User user = userStorage.getEntity(id);
-        return userStorage.getListByIds(user.getFriends());
+        return userStorage.getListByIds(getUser(id).getFriends());
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
