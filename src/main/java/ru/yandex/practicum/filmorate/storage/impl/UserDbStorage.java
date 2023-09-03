@@ -109,7 +109,6 @@ public class UserDbStorage implements UserStorage {
         } else {
             String sql = "SELECT user_id FROM user_friend WHERE user_id = ? AND friend_id = ?";
             Integer existingUserId = jdbcTemplate.queryForObject(sql, Integer.class, id, friendId);
-
             if (existingUserId != null) {
                 throw new ValidateException("Вы уже отправили запрос этому пользователю");
             } else {
@@ -123,7 +122,6 @@ public class UserDbStorage implements UserStorage {
     public void removeFriend(int id, int friendId) {
         String sqlCheck = "SELECT COUNT(*) FROM user_friend WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";
         int friendCount = jdbcTemplate.queryForObject(sqlCheck, Integer.class, id, friendId, friendId, id);
-
         if (friendCount == 0) {
             throw new ValidateException("Вы не отправляли пользователю запрос на дружбу");
         } else {

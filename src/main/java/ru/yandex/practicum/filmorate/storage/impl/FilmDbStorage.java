@@ -24,6 +24,7 @@ import java.util.Set;
 @Component
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
+
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -56,7 +57,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Film createFilm (Film film) {
+    public Film createFilm(Film film) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("film")
                 .usingGeneratedKeyColumns("film_id");
@@ -101,7 +102,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void addLike(int filmId, int userId) {
         SqlRowSet checkRows = jdbcTemplate.queryForRowSet("select * from film_user where film_id = ? and user_id = ?", filmId, userId);
-        if(checkRows.next()) {
+        if (checkRows.next()) {
             throw new ValidateException("Вы уже поставили лайк этому фильму");
         } else {
             String sqlQuery = "insert into film_user(film_id, user_id) values (?, ?)";
@@ -118,7 +119,7 @@ public class FilmDbStorage implements FilmStorage {
     public void removeLike(int filmId, int userId) {
         SqlRowSet checkRows = jdbcTemplate.queryForRowSet("select * from film_user where film_id = ? and user_id = ?", filmId, userId);
         log.info("Проверка поставленных лайков пользователя с id: {} фильму с id {}", userId, filmId);
-        if(checkRows.next()) {
+        if (checkRows.next()) {
             String sql = "delete from film_user where film_id = ? and user_id = ?";
             jdbcTemplate.update(sql, filmId, userId);
             // обновляем рейтинг в таблице film
