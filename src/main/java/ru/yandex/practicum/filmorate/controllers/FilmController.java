@@ -2,63 +2,62 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Entity;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 
 @Slf4j
 @RestController
+@RequestMapping("/films")
 public class FilmController {
-    private final InMemoryFilmStorage filmStorage;
     private final FilmService filmService;
 
-    public FilmController(InMemoryFilmStorage filmStorage, FilmService filmService) {
-        this.filmStorage = filmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
-    @PostMapping(value = "/films")
+    @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) { // объект Film передается в теле запроса (без id), если поля объекта не заполнены произойдёт ошибка
-        log.info("Получен POST-запрос к эндпоинту: '/film'");
-        return filmStorage.create(film);
+        log.info("Получен POST-запрос к эндпоинту: '/films'");
+        return filmService.createFilm(film);
     }
 
-    @PutMapping(value = "/films")
+    @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) { // объект Film передается в теле запроса, если поля объекта не заполнены произойдёт ошибка
-        log.info("Получен PUT-запрос к эндпоинту: '/film'");
-        return filmStorage.update(film);
+        log.info("Получен PUT-запрос к эндпоинту: '/films'");
+        return filmService.updateFilm(film);
     }
 
-    @GetMapping("/films")
-    public List<Film> getAllFilms() {
-        return filmStorage.getAllValues();
+    @GetMapping("/{id}")
+    public Optional<Film> getFilmById(@PathVariable int id){
+        log.info("Получен GET-запрос к эндпоинту: '/films/{id}'");
+        return filmService.findFilmById(id);
     }
 
-
-    @GetMapping("/films/{id}")
-    public Entity getUser(@PathVariable int id) {
-        return filmStorage.getEntity(id);
+    @GetMapping
+    public Collection<Film> getAllFilms() {
+        log.info("Получен GET-запрос к эндпоинту: '/films'");
+        return filmService.findAllFilms();
     }
 
-    @PutMapping("/films/{id}/like/{userId}")
+    @PutMapping("/{id}/like/{userId}")
     public void addLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Получен PUT-запрос к эндпоинту: '/films/{id}/like/{userId}'");
         filmService.addLike(id, userId);
     }
 
-    @DeleteMapping("/films/{id}/like/{userId}")
+    @DeleteMapping("/{id}/like/{userId}")
     public void removeLike(@PathVariable int id, @PathVariable int userId) {
         log.info("Получен DELETE-запрос к эндпоинту: '/films/{id}/like/{userId}'");
         filmService.removeLike(id, userId);
     }
 
-    @GetMapping("/films/popular")
-    public List<Film> getListOfPopularFilms(@RequestParam(defaultValue = "10") String count) {
+    @GetMapping("/popular")
+    public Collection<Film> getListOfPopularFilms(@RequestParam(defaultValue = "10") String count) {
         log.info("Получен GET-запрос к эндпоинту: '/films/popular?count={count}'");
-        return filmService.getListOfTopRatedFilms(count);
+        return filmService.getListOfPopularFilms(count);
     }
 }

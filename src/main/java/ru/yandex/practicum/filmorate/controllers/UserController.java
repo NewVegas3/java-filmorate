@@ -4,66 +4,72 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 
 @Slf4j
 @RestController
+@RequestMapping("/users")
 public class UserController {
-
-    private final InMemoryUserStorage userStorage;
     private final UserService userService;
 
-    public UserController(InMemoryUserStorage userStorage, UserService userService) {
-        this.userStorage = userStorage;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/users")
-    public User createUser(@Valid @RequestBody User user) {
+    @PostMapping
+    public User createUser(@Valid @RequestBody User user) { // объект User передается в теле запроса (без id), если поля объекта не заполнены произойдёт ошибка
         log.info("Получен POST-запрос к эндпоинту: '/users'");
-        return userStorage.create(user);
+        return userService.createUser(user);
     }
 
-    @PutMapping(value = "/users")
-    public User updateUser(@Valid @RequestBody User user) {
+    @PutMapping
+    public User updateUser(@Valid @RequestBody User user) { // объект User передается в теле запроса
         log.info("Получен PUT-запрос к эндпоинту: '/users'");
-        return userStorage.update(user);
+        return userService.updateUser(user);
     }
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userStorage.getAllValues();
+    @GetMapping("/{id}")
+    public Optional<User> getUserById(@PathVariable int id){
+        log.info("Получен GET-запрос к эндпоинту: '/users/{id}'");
+        return userService.findUserById(id);
     }
 
-    @GetMapping("/users/{id}")
-    public User getUser(@PathVariable int id) {
-        return userStorage.getEntity(id);
+    @GetMapping
+    public Collection<User> getAllUsers() {
+        log.info("Получен GET-запрос к эндпоинту: '/users'");
+        return userService.findAllUsers();
     }
 
-    @PutMapping("/users/{id}/friends/{friendId}")
+    @GetMapping("/{id}/friends")
+    public Collection<User> getListOfUsersFriends(@PathVariable int id) {
+        log.info("Получен GET-запрос к эндпоинту: '/users/{id}/friends'");
+        return userService.findUsersFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Collection<User> getListOfCommonFriends(@PathVariable int id, @PathVariable int otherId) {
+        log.info("Получен GET-запрос к эндпоинту: '/users/{id}/friends/common/{otherId}'");
+        return userService.getListOfCommonFriends(id, otherId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void removeUser(@PathVariable int id) {
+        log.info("Получен DELETE-запрос к эндпоинту: '/users'/{id}'");
+        userService.removeUser(id);
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable int id, @PathVariable int friendId) {
-        log.info("Получен PUT-запрос к эндпоинту: '/users/{id}/friends/{friendId}'");
+        log.info("Получен PUT-запрос к эндпоинту: '/user'/{id}/friends/{friendId}'");
         userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/users/{id}/friends/{friendId}")
+    @DeleteMapping("/{id}/friends/{friendId}")
     public void removeFriend(@PathVariable int id, @PathVariable int friendId) {
-        log.info("Получен DELETE-запрос к эндпоинту: '/users/{id}/friends/{friendId}'");
+        log.info("Получен DELETE-запрос к эндпоинту: '/user'/{id}/friends/{friendId}'");
         userService.removeFriend(id, friendId);
-    }
-
-    @GetMapping("/users/{id}/friends")
-    public List<User> getListOfUsersFriends(@PathVariable int id) {
-        log.info("Получен GET-запрос к эндпоинту: '/users/{id}/friends'");
-        return userStorage.getListByIds(getUser(id).getFriends());
-    }
-
-    @GetMapping("/users/{id}/friends/common/{otherId}")
-    public List<User> getListOfCommonFriends(@PathVariable int id, @PathVariable int otherId) {
-        log.info("Получен GET-запрос к эндпоинту: '/users/{id}/friends/common/{otherId}'");
-        return userService.getListOfFriends(id, otherId);
     }
 }
