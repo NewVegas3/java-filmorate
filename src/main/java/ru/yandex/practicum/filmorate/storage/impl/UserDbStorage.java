@@ -27,13 +27,13 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public Collection<User> findAllUsers() {
-        String sql = "select * from users";
+        String sql = "SELECT * FROM users";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs));
     }
 
     @Override
     public Collection<User> findUsersFriends(int id) {
-        String sql = "select * from users where user_id in (select friend_id from user_friend where user_id = ?)";
+        String sql = "SELECT * FROM users WHERE user_id IN (SELECT friend_id FROM user_friend WHERE user_id = ?)";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs), id);
     }
 
@@ -42,13 +42,7 @@ public class UserDbStorage implements UserStorage {
         String query = "SELECT user_id, email, login, name, birthday FROM users WHERE user_id = ?";
         return jdbcTemplate.query(query, new Object[]{id}, resultSet -> {
             if (resultSet.next()) {
-                User user = new User(
-                        resultSet.getInt("user_id"),
-                        resultSet.getString("email"),
-                        resultSet.getString("login"),
-                        resultSet.getString("name"),
-                        resultSet.getDate("birthday").toLocalDate()
-                );
+                User user = makeUser(resultSet);
                 log.info("Найден пользователь: {} {}", user.getId(), user.getLogin());
                 return Optional.of(user);
             } else {
@@ -73,7 +67,6 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User createUser(User user) {
-        // Определяем и настраиваем SimpleJdbcInsert
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("user_id");

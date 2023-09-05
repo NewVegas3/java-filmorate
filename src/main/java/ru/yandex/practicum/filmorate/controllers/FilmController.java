@@ -19,18 +19,6 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    @PostMapping
-    public Film createFilm(@Valid @RequestBody Film film) { // объект Film передается в теле запроса (без id), если поля объекта не заполнены произойдёт ошибка
-        log.info("Получен POST-запрос к эндпоинту: '/films'");
-        return filmService.createFilm(film);
-    }
-
-    @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) { // объект Film передается в теле запроса, если поля объекта не заполнены произойдёт ошибка
-        log.info("Получен PUT-запрос к эндпоинту: '/films'");
-        return filmService.updateFilm(film);
-    }
-
     @GetMapping("/{id}")
     public Optional<Film> getFilmById(@PathVariable int id) {
         log.info("Получен GET-запрос к эндпоинту: '/films/{id}'");
@@ -41,6 +29,18 @@ public class FilmController {
     public Collection<Film> getAllFilms() {
         log.info("Получен GET-запрос к эндпоинту: '/films'");
         return filmService.findAllFilms();
+    }
+
+    @PostMapping
+    public Film createFilm(@Valid @RequestBody Film film) {
+        log.info("Получен POST-запрос к эндпоинту: '/films'");
+        return filmService.createFilm(film);
+    }
+
+    @PutMapping
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        log.info("Получен PUT-запрос к эндпоинту: '/films'");
+        return filmService.updateFilm(film);
     }
 
     @PutMapping("/{id}/like/{userId}")
