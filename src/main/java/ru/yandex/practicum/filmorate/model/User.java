@@ -8,24 +8,25 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @Builder
-public class User extends Entity {
+public class User {
+    private int id;
     @NonNull
     @Email
-    private final String email;
+    private String email;
     @NonNull
     @Pattern(regexp = "\\S*$")
-    private final String login;
+    private String login;
     private String name;
     @Past
-    private final LocalDate birthday;
-    private Set<Integer> friends;
+    private LocalDate birthday;
 
-    public User(String email, String login, String name, LocalDate birthday, Set<Integer> friends) {
+    public User(int id, String email, String login, String name, LocalDate birthday) {
+        this.id = id;
         this.email = email;
         this.login = login;
         this.name = name;
@@ -33,9 +34,14 @@ public class User extends Entity {
             this.name = login;
         }
         this.birthday = birthday;
-        this.friends = friends;
-        if (friends == null) {
-            this.friends = new HashSet<>();
-        }
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("email", email);
+        values.put("login", login);
+        values.put("name", name);
+        values.put("birthday", birthday);
+        return values;
     }
 }
